@@ -1,0 +1,266 @@
+const express = require("express")
+const app = express();
+const Discord = require('discord.js');
+
+app.listen(() => console.log("I'm Ready To Work..! 24H"));
+app.get('/', (req, res) => {
+  res.send(`
+  <body>
+  <center><h1>Bot 24H ON!</h1></center
+  </body>
+  <img src="https://cdn.discordapp.com/attachments/1083326842917892196/1092828228168712223/20230317_162409.jpg">`)
+});
+const { Client, Intents, Collection, MessageEmbed, Permissions, MessageAttachment, utils, Utils, MessageActionRow, MessageSelectMenu, MessageButton, ButtonInteraction, ColorResolvable, CommandInteraction, EmojiResolvable, Message, MessageReaction, TextChannel, User, MessageButtonStyle, GuildMember, WebhookClient } = require('discord.js');
+const { PREFIX } = require('./JSON/config.json');
+
+const client = new Client({ intents: 32767 });
+
+setTimeout(() => {
+  if (!client || !client.user) {
+    console.log("Client Not Login, Process Kill") // اوتو كيل 1 عشان اذا البوت ما سوى لوقين بسبب ريبل ات
+    process.kill(1);
+  } else {
+    console.log("ShN")
+  }
+}, 10000);
+
+client.commands = new Collection();
+client.events = new Collection();
+
+['commands', 'events'].forEach(handler => {
+  require(`./handlers/${handler}`)(client);
+})
+
+module.exports = client
+////////////////////////////////////////////////////////////////////////////////////////
+const prefix = "-";
+const FeedBackRoom = "1128303683940135023";//روم الأراء
+const done = "1119408764366360618";//روم التسليمات
+const Onwer = "807995979717935134";//أيدي الأونر
+const Bank = "955332314706087957";//أيدي البنك في حال لايوجد عادي
+const Staff = "1128276078364987444";//ايدي رتبة الستاف
+const TaxChannel = "1134204038158757918";//ايدي روم الضريبة
+const AdsChannel = "1119263743398907915";//روم الأعلانات
+const SupportChannel = "1118931406802911333";//روم التكت حق الدعم الفني
+const Line = "https://media.discordapp.net/attachments/1109908837001068625/1128280197658062938/14a87b9e759d6126.gif";
+
+const Chl = ["1118875967453155408", "1118900988779171940", "1118974903236960369", "1119027290261700688", "1118932304061014026", "1118928449269137430", "1119412697180676236"];
+
+
+client.on("messageCreate", message => {
+  if (message.content.includes("has transferred")) {
+    if (done.includes(message.channel.id)) {
+      message.channel.send(Line);
+    }
+  }
+});
+
+
+process.on("uncaughtException", (error) => {
+  return console.error(error);
+});
+
+process.on("unhandledRejection", (error) => {
+  return console.error(error);
+});
+
+process.on("rejectionHandled", (error) => {
+  return console.error(error);
+});
+
+
+client.on("messageCreate", message => {
+  if (message.content.startsWith("حول")) {
+
+    if (message.author.bot) return
+    if (message.member.roles.cache.has(`${Staff}`)) {
+    } else {
+      message.reply("لا يمكنك تنفيذ هذا الأمر. ليس لديك الصلاحيات اللازمة.");
+      return;
+    }
+    const user = message.mentions.users.first();
+    if (!user) return message.reply("**اخي الأداري منشن الشخص**");
+    message.channel.send('التحويل فـ روم <#1119026864145571862>')
+    message.channel.send(`التحويل الى <@${Bank}>`)
+    message.channel.send(`\`c 955332314706087957 المبلغ\``);
+    message.delete()
+  }
+});
+
+
+client.on("messageCreate", message => {
+  if (message.content.startsWith("قيم")) {
+    if (message.author.bot) return
+    if (message.member.roles.cache.has(`${Staff}`)) {
+    } else {
+      message.reply("لا يمكنك تنفيذ هذا الأمر. ليس لديك الصلاحيات اللازمة.");
+      return;
+    }
+    const user = message.mentions.users.first();
+    if (!user) return message.reply("**اخي الأداري منشن الشخص**");
+    message.channel.send(`** ف فضلا وليس امرأ رايك عنا في
+ <#${FeedBackRoom}> **
+    ${user}`)
+    message.delete()
+  }
+});
+
+client.on("messageCreate", message => {
+  if (message.content.startsWith("تفضل")) {
+
+    if (message.author.bot) return
+    if (message.member.roles.cache.has(`${Staff}`)) {
+    } else {
+      message.reply("لا يمكنك تنفيذ هذا الأمر. ليس لديك الصلاحيات اللازمة.");
+      return;
+    }
+
+    message.channel.send(`**تفضل معك الأداري ${message.author}
+    كيف اقدر اخدمك ؟**`)
+    message.delete()
+  }
+});
+
+client.on("messageCreate", message => {
+  if (message.author.bot) return
+  if (message.content.startsWith("خط")) {
+    message.delete()
+    message.channel.send(`${Line}`);
+  }
+});
+
+client.on("messageCreate", message => {
+  if (message.channel.id === `${FeedBackRoom}`) {
+    if (message.author.bot) return
+    let Embed = new MessageEmbed()
+      .setDescription(` <a:aaaaaa:1128307470977208360> **__Thank You For FeedBack__** <a:aaaaaa:1128307470977208360> `)
+      .setImage(`${Line}`)
+      .setColor("#006600")
+    message.react("❤️")
+    message.react("🫡")
+    message.reply({ embeds: [Embed] })
+  }
+});
+
+client.on("messageCreate", message => {
+  if (message.channel.type === "dm" || message.author.bot) return;
+
+  if (TaxChannel.includes(message.channel.id)) {
+    let args = message.content.split(' ')[0];
+    if (!args) return;
+
+    if (args.endsWith("m")) args = args.replace(/m/gi, "") * 1000000;
+    else if (args.endsWith("k") || args.endsWith("K")) args = args.replace(/[kK]/gi, "") * 1000;
+    let args2 = parseInt(args);
+    let tax = Math.floor(args2 * (20 / 19) + 1);
+    let tax2 = Math.floor(args2 * (20 / 19) + 1 - args2);
+    let tax3 = Math.floor(tax2 * (20 / 19) + 1);
+    let tax4 = Math.floor(tax2 + tax3 + args2);
+
+    message.reply(`> <a:fTFAJzeG:1128306509663707199> **__Your tax is:__ ${tax}**`);
+  }
+});
+
+client.on("messageCreate", message => {
+  if (message.author.bot) return
+  if (Chl.includes(message.channel.id)) {
+    message.channel.send(`${Line}`);
+  }
+});
+
+let AUTOREACTCHANNEL = ["1128303704282501274"]//ايدي الشات
+
+client.on('messageCreate', async moka => {
+  if (moka.channel.type === 'DM' || moka.author.bot) return
+  if (AUTOREACTCHANNEL.includes(moka.channel.id)) {
+    moka.react('👍')
+    moka.react('👎')
+  }
+})
+
+client.on("messageCreate", async message => {
+  if (message.content.startsWith("-نداء")) {
+    let user = message.mentions.users.first()
+    if (!user) return message.reply({ content: "برجاء منشن الشخص" })
+
+
+    user.send({ content: `**تم ندائك بواسطه ${message.author} برجاء سرعه التوجه الي روم ${message.channel}**` })
+      .then(() => message.reply({ content: `:white_check_mark: **${user} تم الارسال بنجاح الي شخص**` }))
+      .catch(() => message.reply({ content: `:x: Error when send to ${user}, المعلم ممكن يكون مقفل الخاص` }))
+
+  }
+})
+
+
+client.on('messageCreate', bader => {
+  if(bader.content.startsWith(prefix + "ساي")){
+  let args = bader.content.split(' ').slice('1').join(" ")
+  bader.delete()
+    bader.channel.send(`${args}`)
+  }
+})
+
+
+client.on("messageCreate", async message => {
+  if (message.author.bot) return;
+  if (!message.channel.guild) return;
+  if (message.content.startsWith(prefix + 'امباد')) {
+    if (!message.member.roles.cache.has('1128281171395104808')) {
+      return message.reply({ content: "** 😕 You don't have permissions **" });
+    }
+    if (!message.guild.me.permissions.has('ADMINISTRATOR')) {
+      return message.reply({ content: `** 😕 I couldn't edit the channel permissions. Please check my permissions and role position. **` });
+    }
+    let args = message.content.split(' ');
+    args.shift();
+    let attach = message.attachments.first();
+    let content = args.join(' ');
+
+    if (!content && !attach) {
+      return message.channel.send({ content: '** ❌ Please include a message or attach an image **' });
+    }
+    message.delete();
+
+    const embed = new MessageEmbed()
+      .setDescription(content)
+      .setColor("#006600");
+      
+    if (attach) {
+      embed.setImage(attach.url);
+    }
+
+    message.channel.send({ embeds: [embed] });
+  }
+});
+
+
+client.on("messageCreate", message => {
+  if (message.content.startsWith("-help")) {
+
+    if (message.author.bot) return
+    if (message.member.roles.cache.has(`${Staff}`)) {
+    } else {
+      message.reply("لا يمكنك تنفيذ هذا الأمر. ليس لديك الصلاحيات اللازمة.");
+      return;
+    }
+
+    message.channel.send(`> **-بنق**
+> **-ضريبه**
+> **قيم**
+> **خط**
+> **تفضل**
+> **-ملفي**
+> **-نداء**
+> **حول**
+> **-امباد**
+> **-ساي**`)
+    //message.delete()
+  
+  }
+});
+
+
+
+////////////////////////////////////
+
+client.login(process.env.token);
